@@ -5,7 +5,7 @@
         </div>
     @endif
     @if (session()->has('error'))
-        <div class="alert bg-red-600" role="alert">
+        <div class="alert p-3 rounded m-3 bg-red-600" role="alert">
             {{ session()->get('error') }}
         </div>
     @endif

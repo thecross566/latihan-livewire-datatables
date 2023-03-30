@@ -41,7 +41,7 @@ class UserComponent extends Component
   // Reset Fields
   public function resetInputFields()
   {
-
+    $this->resetErrorBag();
     $this->name = '';
     $this->email = '';
     $this->password = '';
