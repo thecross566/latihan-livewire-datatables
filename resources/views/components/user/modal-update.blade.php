@@ -13,9 +13,8 @@
 
                             <div class="w-full">
                                 <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                    <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Form
-                                        Tambah
-                                        User</h3>
+                                    <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Ubah
+                                        Data User</h3>
                                     <div class="mt-2">
 
                                         <form>
@@ -77,7 +76,7 @@
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                         <div class="mt-6 flex items-center justify-end gap-x-6">
-                            <button wire:click="closeModal()" type="button"
+                            <button wire:click="closeModal('isUpdate')" type="button"
                                 class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
                             <button wire:click="saveUpdate()" type="button"
                                 class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>

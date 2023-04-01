@@ -13,6 +13,7 @@ class UserDatatables extends LivewireDatatable
 {
     public $name, $email, $user_id;
     public $isUpdate = 0;
+    public $isDelete = 0;
     public $model = User::class;
     public function buildActions()
     {
@@ -23,6 +24,7 @@ class UserDatatables extends LivewireDatatable
                 return [
                     Action::value('csv')->label('Export CSV')->export('User.csv')->styles($this->exportStyles)->widths($this->exportWidths),
                     Action::value('html')->label('Export HTML')->export('User.html')->styles($this->exportStyles)->widths($this->exportWidths),
+                    Action::value('pdf')->label('Export PDF')->export('User.csv')->styles($this->exportStyles)->widths($this->exportWidths)
                 ];
             }),
         ];
@@ -52,8 +54,8 @@ class UserDatatables extends LivewireDatatable
             Column::name('email')->label('Email'),
             DateColumn::name('created_at')->label('Creation Date'),
 
-            Column::callback(['id'], function ($id) {
-                return view('Actions', ['id' => $id]);
+            Column::callback(['id', 'name', 'email'], function ($id, $name, $email) {
+                return view('Actions', ['id' => $id, 'name' => $name, 'email' => $email]);
             })->label("Actions")->unsortable()->excludeFromExport()
 
         ];
@@ -65,7 +67,7 @@ class UserDatatables extends LivewireDatatable
         $this->name = $user->name;
         $this->user_id = $id;
         $this->email = $user->email;
-        $this->openModal();
+        $this->openModal('isUpdate');
     }
 
     public function resetForm()
@@ -86,23 +88,41 @@ class UserDatatables extends LivewireDatatable
             // Update category
             User::find($this->user_id)->fill($data)->save();
             session()->flash('success', 'User Updated Successfully!!');
-
-            $this->closeModal();
+            $this->resetForm();
+            $this->closeModal('isUpdate');
         } catch (\Exception $e) {
-            session()->flash('error', 'Something goes wrong while updating category!!');
-            $this->closeModal();
+            session()->flash('error', 'Something goes wrong while updating user!!');
+            $this->closeModal('isUpdate');
         }
     }
 
-
-    public function openModal()
+    public function hapus($id)
     {
-        $this->isUpdate = true;
+        try {
+            User::find($id)->delete();
+            session()->flash('success', "Hapus User Berhasil");
+            $this->resetForm();
+            $this->closeModal('isDelete');
+        } catch (\Throwable $th) {
+            session()->flash('error', "Somethis goes wrong while delete user");
+            //throw $th;
+        }
+    }
+
+    public function openModal($modal)
+    {
+        $this->$modal = true;
     }
     // CloseModal
-    public function closeModal()
+    public function closeModal($modal)
     {
-        $this->isUpdate = false;
+        $this->$modal = false;
         $this->resetForm();
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->user_id = $id;
+        $this->openModal('isDelete');
     }
 }
